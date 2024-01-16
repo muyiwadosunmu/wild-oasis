@@ -21,13 +21,7 @@ function App() {
             <div>
               <Heading as="h1">The Wild Oasis</Heading>
               <Heading as="h2">Check In and Outs</Heading>
-              <Button
-                variation="primary"
-                size="medium"
-                onClick={() => alert("Check In")}
-              >
-                Check In
-              </Button>
+              <Button onClick={() => alert("Check In")}>Check In</Button>
               <Button
                 variation="secondary"
                 size="small"
