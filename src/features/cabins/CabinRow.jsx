@@ -1,8 +1,12 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import styled from "styled-components";
+import { HiSquare2Stack, HiPencil, HiTrash } from "react-icons/hi2";
+
 import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabinHook";
+import { useCreateCabin } from "./useCreateCabinHook";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,6 +50,8 @@ const Discount = styled.div`
 function CabinRow({ cabin }) {
   const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin(); // user define hooks
+  const { isCreating, createCabin } = useCreateCabin();
+
   const {
     id: cabinId,
     name,
@@ -53,7 +59,19 @@ function CabinRow({ cabin }) {
     regularPrice,
     discount,
     image,
+    description,
   } = cabin;
+
+  function handleDuplicate() {
+    createCabin({
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+      description,
+    });
+  }
 
   /**
    *  Below is the previous look before we converted it to using hook
@@ -84,14 +102,17 @@ function CabinRow({ cabin }) {
           <span>&mdash;</span>
         )}
         <div>
+          <button disabled={isCreating} onClick={handleDuplicate}>
+            <HiSquare2Stack />
+          </button>
           <button
             onClick={() => setShowForm((show) => !show)}
             disabled={isDeleting}
           >
-            Edit
+            <HiPencil />
           </button>
           <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>

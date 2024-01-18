@@ -9,10 +9,9 @@ import { useCreateCabin } from "./useCreateCabinHook";
 import { useEditCabin } from "./useEditCabinHook";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
-  const { id: editId, ...editValues } = cabinToEdit;
-
   const { createCabin, isCreating } = useCreateCabin();
   const { editCabin, isEditing } = useEditCabin();
+  const { id: editId, ...editValues } = cabinToEdit;
 
   const isWorking = isCreating || isEditing;
 
