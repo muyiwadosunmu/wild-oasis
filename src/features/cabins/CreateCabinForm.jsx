@@ -8,7 +8,7 @@ import Textarea from "../../ui/Textarea";
 import { useCreateCabin } from "./useCreateCabinHook";
 import { useEditCabin } from "./useEditCabinHook";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { createCabin, isCreating } = useCreateCabin();
   const { editCabin, isEditing } = useEditCabin();
   const { id: editId, ...editValues } = cabinToEdit;
@@ -73,14 +73,21 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       editCabin(
         { newCabinData: { ...data, image }, id: editId },
         {
-          onSuccess: (data) => reset(),
+          onSuccess: (data) => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     else
       createCabin(
         { ...data, image: image },
         {
-          onSuccess: (data) => reset(), // We even have access to the data in the callback
+          onSuccess: (data) => {
+            reset();
+            onCloseModal?.();
+          },
+          // We even have access to the data in the callback
         }
       );
   }
@@ -90,7 +97,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -167,7 +177,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset" disabled={isWorking}>
+        <Button
+          variation="secondary"
+          type="reset"
+          disabled={isWorking}
+          onClick={() => onCloseModal?.()} // We're conditionally calling the closeModal function
+        >
           Cancel
         </Button>
         <Button>{isEditSession ? "Edit Cabin" : "Create new Cabin"}</Button>
