@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useContext } from "react";
 import styled from "styled-components";
 
@@ -89,7 +90,10 @@ function Row({ children }) {
   );
 }
 
-function Body({ children }) {}
+function Body({ data, render }) {
+  if (!data.length) return <Empty>No data to show at the moment</Empty>;
+  return <StyledBody>{data.map(render)}</StyledBody>;
+}
 
 // function Footer({ children }) {}
 
