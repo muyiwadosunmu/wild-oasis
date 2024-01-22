@@ -1,4 +1,11 @@
-import { useContext, createContext, cloneElement, useState } from "react";
+import {
+  useContext,
+  createContext,
+  cloneElement,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
@@ -70,17 +77,31 @@ function Modal({ children }) {
   );
 }
 
-function Open({ children, opens: opensWindowName }) {
-  const { open } = useContext(ModalContext);
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
-
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
+  const ref = useRef();
+
+  useEffect(
+    function () {
+      function handleClick(e) {
+        if (ref.current && !ref.current.contains(e.target)) {
+          console.log("click outside");
+          close();
+        }
+      }
+
+      // We added true because because we don't want the event to bubble up,**CAPTURING PHASE
+      document.addEventListener("click", handleClick, true);
+      return () => document.removeEventListener("click", handleClick);
+    },
+    [close]
+  );
+
   if (name !== openName) return null;
+
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
@@ -91,6 +112,10 @@ function Window({ children, name }) {
     // document.querySelector // anywhere works
     /**portal is important because of the css property overflow: hidden  */
   );
+}
+function Open({ children, opens: opensWindowName }) {
+  const { open } = useContext(ModalContext);
+  return cloneElement(children, { onClick: () => open(opensWindowName) });
 }
 
 Modal.Open = Open;
