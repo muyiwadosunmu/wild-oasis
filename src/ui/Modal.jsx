@@ -9,6 +9,7 @@ import {
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -79,23 +80,8 @@ function Modal({ children }) {
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
-  const ref = useRef();
 
-  useEffect(
-    function () {
-      function handleClick(e) {
-        if (ref.current && !ref.current.contains(e.target)) {
-          console.log("click outside");
-          close();
-        }
-      }
-
-      // We added true because because we don't want the event to bubble up,**CAPTURING PHASE
-      document.addEventListener("click", handleClick, true);
-      return () => document.removeEventListener("click", handleClick);
-    },
-    [close]
-  );
+  const ref = useOutsideClick(close);
 
   if (name !== openName) return null;
 
