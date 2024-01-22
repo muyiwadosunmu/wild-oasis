@@ -1,8 +1,6 @@
-import { useContext, createContext, cloneElement, useState } from "react";
-import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { HiXMark } from "react-icons/hi2";
-
+import { createPortal } from "react-dom";
 const StyledModal = styled.div`
   position: fixed;
   top: 50%;
@@ -52,39 +50,14 @@ const Button = styled.button`
   }
 `;
 
-// RECIPE FOR CREATING A COMPOUND COMPONENT
-// 1 Create a context
-const ModalContext = createContext();
-
-// 2 Create Parent Component
-function Modal({ children }) {
-  const [openName, setOpenName] = useState("");
-
-  const close = () => setOpenName("");
-  const open = setOpenName;
-
-  return (
-    <ModalContext.Provider value={{ openName, close, open }}>
-      {children}
-    </ModalContext.Provider>
-  );
-}
-
-function Open({ children, opens: opensWindowName }) {
-  const { open } = useContext(ModalContext);
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
-
-function Window({ children, name }) {
-  const { openName, close } = useContext(ModalContext);
-  if (name !== openName) return null;
+function Modal({ children, onClose }) {
   return createPortal(
     <Overlay>
       <StyledModal>
-        <Button onClick={close}>
+        <Button onClick={onClose}>
           <HiXMark />
         </Button>
-        <div>{cloneElement(children, { onCloseModal: close })}</div>
+        <div>{children}</div>
       </StyledModal>
     </Overlay>,
     document.body
@@ -92,8 +65,5 @@ function Window({ children, name }) {
     /**portal is important because of the css property overflow: hidden  */
   );
 }
-
-Modal.Open = Open;
-Modal.Window = Window;
 
 export default Modal;
