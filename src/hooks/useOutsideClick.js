@@ -15,7 +15,7 @@ export function useOutsideClick(handler, listenCapturing = true) {
   
         // We added true because because we don't want the event to bubble up,**CAPTURING PHASE
         document.addEventListener("click", handleClick, listenCapturing);
-        return () => document.removeEventListener("click", handleClick);
+        return () => document.removeEventListener("click", handleClick, listenCapturing);
       },
       [handler, listenCapturing]
     );

@@ -1,15 +1,13 @@
-/* eslint-disable react/prop-types */
 import styled from "styled-components";
-import { HiSquare2Stack, HiPencil, HiTrash } from "react-icons/hi2";
 
-import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
-import { useDeleteCabin } from "./useDeleteCabinHook";
-import { useCreateCabin } from "./useCreateCabinHook";
+import { useDeleteCabin } from "./useDeleteCabin";
+import { formatCurrency } from "../../utils/helpers";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { useCreateCabin } from "./useCreateCabin";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
-import Menus from "../../ui/Menus";
 
 // const TableRow = styled.div`
 //   display: grid;
@@ -51,7 +49,7 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const { isDeleting, deleteCabin } = useDeleteCabin(); // user define hooks
+  const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
 
   const {
@@ -75,22 +73,6 @@ function CabinRow({ cabin }) {
     });
   }
 
-  /**
-   *  Below is the previous look before we converted it to using hook
-  const queryClient = useQueryClient();
-  const { isLoading: isDeleting, mutate } = useMutation({
-    // mutationFn: (id) => deleteCabin(id),
-    mutationFn: deleteCabin,
-    onSuccess: () => {
-      toast.success("Cabin Successfully deleted");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-    },
-    onError: (err) => toast.error(err.message),
-  });
-   */
-
   return (
     <Table.Row>
       <Img src={image} />
@@ -106,16 +88,17 @@ function CabinRow({ cabin }) {
         <button disabled={isCreating} onClick={handleDuplicate}>
           <HiSquare2Stack />
         </button>
+
         <Modal>
           <Modal.Open opens="edit">
-            <button disabled={isDeleting}>
+            <button>
               <HiPencil />
             </button>
           </Modal.Open>
-
           <Modal.Window name="edit">
             <CreateCabinForm cabinToEdit={cabin} />
           </Modal.Window>
+
           <Modal.Open opens="delete">
             <button>
               <HiTrash />
@@ -129,18 +112,6 @@ function CabinRow({ cabin }) {
             />
           </Modal.Window>
         </Modal>
-
-        <Menus.Menu>
-          {/* The Toggle would open up the list */}
-          <Menus.Toggle id={cabinId} />
-          <Menus.List>
-            <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
-              Duplicate
-            </Menus.Button>
-            <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
-            <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-          </Menus.List>
-        </Menus.Menu>
       </div>
     </Table.Row>
   );
