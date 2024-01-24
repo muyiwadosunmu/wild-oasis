@@ -17,9 +17,6 @@ dependencies:
   date-fns:
     specifier: ^3.2.0
     version: 3.2.0
-  dotenv:
-    specifier: ^16.3.1
-    version: 16.3.1
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -2646,11 +2643,6 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
-
-  /dotenv@16.3.1:
-    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
-    engines: {node: '>=12'}
-    dev: false
 
   /electron-to-chromium@1.4.630:
     resolution: {integrity: sha512-osHqhtjojpCsACVnuD11xO5g9xaCyw7Qqn/C2KParkMv42i8jrJJgx3g7mkHfpxwhy9MnOJr8+pKOdZ7qzgizg==}
