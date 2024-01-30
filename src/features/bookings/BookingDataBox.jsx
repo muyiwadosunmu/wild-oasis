@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
@@ -107,8 +108,8 @@ function BookingDataBox({ booking }) {
     created_at,
     startDate,
     endDate,
-    numNights,
-    numGuests,
+    numOfNights,
+    numOfGuests,
     cabinPrice,
     extrasPrice,
     totalPrice,
@@ -125,7 +126,7 @@ function BookingDataBox({ booking }) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {numOfNights} nights in Cabin <span>{cabinName}</span>
           </p>
         </div>
 
@@ -142,7 +143,7 @@ function BookingDataBox({ booking }) {
         <Guest>
           {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            {guestName} {numOfGuests > 1 ? `+ ${numOfGuests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
