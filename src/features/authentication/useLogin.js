@@ -12,7 +12,7 @@ export function useLogin() {
     onSuccess: (user) => {
         queryClient.setQueriesData(['user'], user)
         // Recall we have access to the user data 
-      navigate("/dashboard");
+      navigate("/dashboard", {replace: true});
     },
     onError:(err) => {
         console.log('ERROR', err)
