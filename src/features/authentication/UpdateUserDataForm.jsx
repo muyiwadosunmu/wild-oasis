@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useUpdateUser } from "./useUpdateUser";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Form from "../../ui/Form";
@@ -17,11 +17,29 @@ function UpdateUserDataForm() {
     },
   } = useUser();
 
+  const { updateUser, isUpdating } = useUpdateUser();
+
   const [fullName, setFullName] = useState(currentFullName);
   const [avatar, setAvatar] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!fullName) return;
+    updateUser(
+      { fullName, avatar },
+      {
+        onSuccess: () => {
+          setAvatar(null);
+          e.target.reset(); // This is standard HTML
+        },
+      }
+    );
+  }
+
+  function handleCancel() {
+    // We did not specify e.preventDefault() because we already set the type of the button this function implements
+    setFullName(currentFullName);
+    setAvatar(null);
   }
 
   return (
@@ -35,17 +53,24 @@ function UpdateUserDataForm() {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           id="fullName"
+          disabled={isUpdating}
         />
       </FormRow>
       <FormRow label="Avatar image">
         <FileInput
           id="avatar"
+          disabled={isUpdating}
           accept="image/*"
           onChange={(e) => setAvatar(e.target.files[0])}
         />
       </FormRow>
       <FormRow>
-        <Button type="reset" variation="secondary">
+        <Button
+          type="reset"
+          variation="secondary"
+          disabled={isUpdating}
+          onClick={handleCancel}
+        >
           Cancel
         </Button>
         <Button>Update account</Button>
